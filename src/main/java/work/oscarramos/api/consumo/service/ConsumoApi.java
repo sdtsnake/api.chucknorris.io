@@ -11,9 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import work.oscarramos.api.consumo.dto.ApiResponseDto;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ConsumoApi {
@@ -31,19 +29,18 @@ public class ConsumoApi {
             }
         });
 
+        Set<String> ids = new HashSet<>();
         List<ApiResponseDto> lista = new ArrayList<>();
 
-        int i=0;
-        do{
-           ApiResponseDto res = cargaApi();
-           if(!lista.stream().anyMatch(a-> a.getId().equals(res.getId()))){
+        while (ids.size()<25){
+            ApiResponseDto res = cargaApi();
+            if(!ids.contains(res.getId())){
                 lista.add(res);
-                i++;
-           }
-        }while(i<25);
+                ids.add(res.getId());
+            }
+        }
 
-    return lista;
-
+        return lista;
     }
     public ApiResponseDto cargaApi(){
         return restTemplate.getForObject("https://api.chucknorris.io/jokes/random",ApiResponseDto.class);

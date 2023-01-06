@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import work.oscarramos.api.consumo.dto.ApiResponseDto;
 import work.oscarramos.api.consumo.service.ConsumoApi;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,8 +18,8 @@ import java.util.List;
 public class ApiController {
     private final ConsumoApi consumoApi;
 
-    @GetMapping(path ="/consumo", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public ResponseEntity<List<ApiResponseDto>> getApiRest(){
+    @GetMapping(path ="/consumo", produces = { MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<Map<String,Object>>> getApiRest(){
         return ResponseEntity.ok(consumoApi.getApiRest());
     }
 }

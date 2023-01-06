@@ -8,7 +8,6 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import work.oscarramos.api.consumo.dto.ApiResponseDto;
 
 import java.io.IOException;
 import java.util.*;
@@ -17,7 +16,7 @@ import java.util.*;
 public class ConsumoApi {
     @Autowired
     RestTemplate restTemplate;
-    public List<ApiResponseDto> getApiRest(){
+    public List<Map<String,Object>> getApiRest(){
 
         restTemplate.getInterceptors().add(new ClientHttpRequestInterceptor() {
             @Override
@@ -30,20 +29,21 @@ public class ConsumoApi {
         });
 
         Set<String> ids = new HashSet<>();
-        List<ApiResponseDto> lista = new ArrayList<>();
+        List<Map<String,Object>> lista = new ArrayList<>();
 
         while (ids.size()<25){
-            ApiResponseDto res = cargaApi();
-            if(!ids.contains(res.getId())){
+            Map<String,Object> res = cargaApi();
+            var id = res.get("id");
+            if(id != null && !ids.contains(id)){
                 lista.add(res);
-                ids.add(res.getId());
+                ids.add(id.toString());
             }
         }
 
         return lista;
     }
-    public ApiResponseDto cargaApi(){
-        return restTemplate.getForObject("https://api.chucknorris.io/jokes/random",ApiResponseDto.class);
+    public Map<String,Object> cargaApi(){
+        return restTemplate.getForObject("https://api.chucknorris.io/jokes/random",Map.class);
     }
 
 
